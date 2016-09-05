@@ -36,22 +36,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:view];
-        [self setClipsToBounds:YES];
-        self.automaticResize = DEFAULT_AUTOMATIC_RESIZE;
-        self.highlightedBackgroundColor = HIGHLIGHTED_BACKGROUND_COLOR;
-        self.font = [UIFont systemFontOfSize:FONT_SIZE_DEFAULT];
-        self.labelMargin = LABEL_MARGIN_DEFAULT;
-        self.bottomMargin = BOTTOM_MARGIN_DEFAULT;
-        self.horizontalPadding = HORIZONTAL_PADDING_DEFAULT;
-        self.verticalPadding = VERTICAL_PADDING_DEFAULT;
-        self.cornerRadius = CORNER_RADIUS;
-        self.borderColor = BORDER_COLOR;
-        self.borderWidth = BORDER_WIDTH;
-        self.textColor = TEXT_COLOR;
-        self.textShadowColor = TEXT_SHADOW_COLOR;
-        self.textShadowOffset = TEXT_SHADOW_OFFSET;
-        self.showTagMenu = DEFAULT_SHOW_TAG_MENU;
+        [self setup];
     }
     return self;
 }
@@ -59,23 +44,28 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self addSubview:view];
-        [self setClipsToBounds:YES];
-        self.highlightedBackgroundColor = HIGHLIGHTED_BACKGROUND_COLOR;
-        self.font = [UIFont systemFontOfSize:FONT_SIZE_DEFAULT];
-        self.labelMargin = LABEL_MARGIN_DEFAULT;
-        self.bottomMargin = BOTTOM_MARGIN_DEFAULT;
-        self.horizontalPadding = HORIZONTAL_PADDING_DEFAULT;
-        self.verticalPadding = VERTICAL_PADDING_DEFAULT;
-        self.cornerRadius = CORNER_RADIUS;
-        self.borderColor = BORDER_COLOR;
-        self.borderWidth = BORDER_WIDTH;
-        self.textColor = TEXT_COLOR;
-        self.textShadowColor = TEXT_SHADOW_COLOR;
-        self.textShadowOffset = TEXT_SHADOW_OFFSET;
-        self.showTagMenu = DEFAULT_SHOW_TAG_MENU;
+        [self setup];
     }
     return self;
+}
+
+- (void)setup {
+    [self addSubview:view];
+    [self setClipsToBounds:YES];
+    self.automaticResize = DEFAULT_AUTOMATIC_RESIZE;
+    self.highlightedBackgroundColor = HIGHLIGHTED_BACKGROUND_COLOR;
+    self.font = [UIFont systemFontOfSize:FONT_SIZE_DEFAULT];
+    self.labelMargin = LABEL_MARGIN_DEFAULT;
+    self.bottomMargin = BOTTOM_MARGIN_DEFAULT;
+    self.horizontalPadding = HORIZONTAL_PADDING_DEFAULT;
+    self.verticalPadding = VERTICAL_PADDING_DEFAULT;
+    self.cornerRadius = CORNER_RADIUS;
+    self.borderColor = BORDER_COLOR;
+    self.borderWidth = BORDER_WIDTH;
+    self.textColor = TEXT_COLOR;
+    self.textShadowColor = TEXT_SHADOW_COLOR;
+    self.textShadowOffset = TEXT_SHADOW_OFFSET;
+    self.showTagMenu = DEFAULT_SHOW_TAG_MENU;
 }
 
 - (void)setTags:(NSArray *)array
@@ -114,6 +104,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    [self display];
 }
 
 - (void)display
@@ -127,7 +118,6 @@
             }
             
             [tagView.button removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            
             [tagViews addObject:subview];
         }
         [subview removeFromSuperview];
@@ -202,7 +192,8 @@
 
 - (void)scrollToBottomAnimated:(BOOL)animated
 {
-    [self setContentOffset: CGPointMake(0.0, self.contentSize.height - self.bounds.size.height + self.contentInset.bottom) animated: animated];
+    [self setContentOffset:CGPointMake(0.0, self.contentSize.height - self.bounds.size.height + self.contentInset.bottom)
+                  animated:animated];
 }
 
 - (void)touchDownInside:(id)sender
@@ -247,11 +238,7 @@
 
 - (UIColor *)getBackgroundColor
 {
-    if (!lblBackgroundColor) {
-        return BACKGROUND_COLOR;
-    } else {
-        return lblBackgroundColor;
-    }
+    return !lblBackgroundColor ? BACKGROUND_COLOR : lblBackgroundColor;
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
